@@ -16,22 +16,37 @@ import (
 )
 
 func main() {
-	s := [5]string{"ab", "abc", "cd", "def", "abcd"}
-	fmt.Println(canConstruct("abcdef", s))
+	s := []string{"ab", "abc", "cd", "def", "abcd"}
+	s1 := []string{"bo", "rd", "ate", "t", "ska", "sk", "boar"}
+	memo := make(map[string]bool)
+	fmt.Println(canConstruct("abcdef", s, memo))
+	fmt.Println(canConstruct("skateboard", s1, memo))
 }
 
-func canConstruct(target string, wordBank [5]string) bool {
+func canConstruct(target string, wordBank []string, memo map[string]bool) bool {
+	if _, ok := memo[target]; ok {
+		return memo[target]
+	}
 	if target == "" {
 		return true
 	}
 	for _, word := range wordBank {
 		if strings.Index(target, word) == 0 {
 			suffix := strings.TrimPrefix(target, word)
-
-			if canConstruct(suffix, wordBank) == true {
+			if canConstruct(suffix, wordBank, memo) == true {
+				memo[target] = true
 				return true
 			}
 		}
 	}
+	memo[target] = false
 	return false
 }
+
+// Complexity
+// Brute force -- Time --- O(n^m * m) --> the extra "m" comes from trimming the prefix
+// Space -- O(m * m)  --> The extra "m" comes from storing new string on every stack call
+
+// memoized
+//Time --> O(n* m^2)
+//Space --> O(m^2)
