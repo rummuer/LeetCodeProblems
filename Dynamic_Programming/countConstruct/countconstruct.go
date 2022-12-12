@@ -38,4 +38,4 @@ func canConstruct(target string, wordBank []string, memo map[string]int) int {
 	return totalCount
 }
 
-// Complexity is Sames as canConstruct
+// Complexity is  Sames as canConstruct

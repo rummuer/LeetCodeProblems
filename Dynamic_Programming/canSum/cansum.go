@@ -1,3 +1,5 @@
+// Can you do it? yes/no - Decision problem
+
 package main
 
 import "fmt"

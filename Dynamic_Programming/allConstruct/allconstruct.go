@@ -24,11 +24,15 @@ func main() {
 	s := []string{"ab", "abc", "cd", "def", "abcd", "ef", "c"}
 	s1 := []string{"bo", "rd", "ate", "t", "ska", "sk", "boar"}
 	s2 := []string{"e", "ee", "eee", "eeee", "eeee", "eeeee", "eeeeee"}
-	fmt.Println(allConstruct("abcdef", s))
-	fmt.Println(allConstruct("skateboard", s1))
-	fmt.Println(allConstruct("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", s2))
+	memo := make(map[string][][]string)
+	fmt.Println(allConstruct("abcdef", s, memo))
+	fmt.Println(allConstruct("skateboard", s1, memo))
+	fmt.Println(allConstruct("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", s2, memo))
 }
-func allConstruct(target string, wordBank []string) [][]string {
+func allConstruct(target string, wordBank []string, memo map[string][][]string) [][]string {
+	if _, ok := memo[target]; ok {
+		return memo[target]
+	}
 	if target == "" {
 		m := make([][]string, 1)
 		fmt.Println("m=", m)
@@ -38,7 +42,7 @@ func allConstruct(target string, wordBank []string) [][]string {
 	for _, word := range wordBank {
 		if strings.Index(target, word) == 0 {
 			suffix := strings.TrimPrefix(target, word)
-			suffixWays := allConstruct(suffix, wordBank)
+			suffixWays := allConstruct(suffix, wordBank, memo)
 			targetWays := make([][]string, 0, 10)
 			for _, arr := range suffixWays {
 				arr = append([]string{word}, arr...)
@@ -50,7 +54,11 @@ func allConstruct(target string, wordBank []string) [][]string {
 
 		}
 	}
+	memo[target] = result
 	return result
 }
 
 // Complexity is  Sames as canConstruct
+// The brute force and DP complexities are same
+// Time --> O(n^m) and space --> O(m)
+// The time complexity is not changed due to the fact that the worst is to find all the possibilitites
